@@ -81,8 +81,8 @@ do
         #SBATCH --cpus-per-task=$nodesize
         #SBATCH --time=0:30:00
         #SBATCH -j oe
-	#module load 2023
-        #module load Python/2.7.18-GCCcore-12.3.0
+	module load 2023
+  module load Python/2.7.18-GCCcore-12.3.0
        cd $PWD
           " > temporary_files/ancjob"$job"_"$2".pbs
 

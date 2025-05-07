@@ -5,30 +5,29 @@
 #User: Unzip the data, put contents into a working directory
 
 #User:Set path to working directory (i.e. this is where ancestry_pipeline.sh is stored)
- WORKING_DIR="/home/maihofer/MRSA/scripts/bbanctest"
- 
+WORKING_DIR=/home/pgca1scz/SNPweights/global_ancestry
+
 ##Call into WD
  cd $WORKING_DIR
- 
 
 #User: Give the location of the PLINK 2 binary
- plink_location="$WORKING_DIR"/plink
+ plink_location=/gpfs/work5/0/pgcdac/ricopili_download/dependencies/plink/plink
+#plink_location=/gpfs/work5/0/pgcdac/ricopili_download/dependencies/plink2/plink2
 
 #User: Write the name of the PLINK bed/bim/fam 
- bfile=mrs_gwas1_vPGC_use
+ bfile=scz_clz34_updated
 
 #User: Give the folder where this PLINK binary is stored 
- bfile_directory=/home/maihofer/MRSA/starting_data
+ bfile_directory=/home/pgca1scz/SNPweights/global_ancestry/clz34_test
 
 #User: Location of SNPweights (Download from http://www.hsph.harvard.edu/alkes-price/software/)
- snpweights_path="$WORKING_DIR"/SNPweights2.1/inferancestry.py
+ snpweights_path="$WORKING_DIR"/SNPweights2.1_KH/SNPweights2.1/inferancestry.py
  
 #User: Location of convertf tool from EIGENSOFT (Download from http://www.hsph.harvard.edu/alkes-price/software/)
- eigensoft_loc="$WORKING_DIR"/EIG5.0.2/bin/convertf
- #eigensoft_loc=/home/genetics/EIG-master/bin/convertf
+ eigensoft_loc=/home/pgca1scz/.conda/envs/rp_env/bin/convertf
 
 #User: Name of panel chosen ('Default': works for most illumina. AffyBB: Designed for Affy biobank chip. GSA: Designed for Illumina GSA)
- panel=Default
+ panel=GSA
  
 #This will supply: 
 #Name of the list of ancestry panel SNP rsids (packaged with script, be sure that this is in WORKING_DIR)
@@ -38,15 +37,15 @@
  if [ $panel == "Default" ]
  then
   snpweights_snplist=hgdp_kgp_merged_v3_jointsample_v4_k6.snplist
-  snpweightfile_path=hgdp_kgp_merged_v3_jointsample_v4_k6.snpweightrefpanel
-  snpweight_clustercenters=hgdp_kgp_merged_v3_jointsample_v4_k6.snpweightrefpanel_clustercenters.csv
+  snpweightfile_path=hgdp_kgp_merged_gsaqced_v3_jointsample_v4_k6.snpweightrefpanel
+  snpweight_clustercenters=hgdp_kgp_merged_gsaqced_v3_jointsample_v4_k6_forsnpweights.snpweightrefpanel_clustercenters.csv
  fi
  
   if [ $panel == "GSA" ]
  then
   snpweights_snplist=hgdp_kgp_merged_v3_jointsample_v4_k6.snplist
-  snpweightfile_path=hgdp_kgp_merged_gsa_v3_jointsample_v4_k6.snpweightrefpanel
-  snpweight_clustercenters=hgdp_kgp_merged_gsa_v3_jointsample_v4_k6_forsnpweights.snpweightrefpanel_clustercenters.csv
+  snpweightfile_path=hgdp_kgp_merged_gsaqced_v3_jointsample_v4_k6.snpweightrefpanel
+  snpweight_clustercenters=hgdp_kgp_merged_gsaqced_v3_jointsample_v4_k6_forsnpweights.snpweightrefpanel_clustercenters.csv
  fi
  
  if [ $panel == "AffyBB" ]
@@ -88,11 +87,13 @@
 #Note: This is programmed to run on a local node. Generally this is not a problem even for hundreds of thousands of subjects.
 #If you MUST run this as a job script, then edit the call_ancestry_v2_may6_2016.sh file,
 #replacing the final 'bash' command with your job submission command.
- chmod u+rwx scripts/call_ancestry_v2_may6_2016.sh
- bash scripts/call_ancestry_v2_may6_2016.sh $plink_location $bfile $rsidfile $bfile_directory $snpweights_snplist $snpweights_path $snpweightfile_path $eigensoft_loc
+ #chmod u+rwx scripts/call_ancestry_v2_may6_2016.sh
+ #bash scripts/call_ancestry_v2_may6_2016.sh $plink_location $bfile $rsidfile $bfile_directory $snpweights_snplist $snpweights_path $snpweightfile_path $eigensoft_loc
  #Use for the newer panels (full genome panels)
-  bash scripts/call_ancestry_v3_aug13_2024.sh $plink_location $bfile $rsidfile $bfile_directory $snpweights_snplist $snpweights_path $snpweightfile_path $eigensoft_loc
+ chmod u+rwx scripts/call_ancestry_v3_aug13_2024.sh 
+ bash scripts/call_ancestry_v3_aug13_2024.sh $plink_location $bfile $rsidfile $bfile_directory $snpweights_snplist $snpweights_path $snpweightfile_path $eigensoft_loc
 
+mkdir -p ancestry
 #Combine the SNPweights ancestry calls
  cat temporary_files/"$bfile"_anc_*.predpc_oneweek  > ancestry/"$bfile".predpc_oneweek
 

@@ -1,10 +1,10 @@
 #Update Illumina rs-id conversion sheet to be useful for PLINK analysis
 
 #V1 - May 5, 2016 - Initial release
-
+setwd("/home/pgca1scz/SNPweights/global_ancestry/")
 args <- commandArgs(trailingOnly = TRUE)
-rsid_illumina <- args[1]
-
+#rsid_illumina <- args[1]
+rsid_illumina <- "Multi-EthnicGlobal_B1_b144_rsids.txt"
 dat1 <- read.table(rsid_illumina,stringsAsFactors=F,header=T)
 names(dat1)[2] <- "SNP"
 
